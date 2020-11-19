@@ -404,9 +404,7 @@ class FocusableSection extends Component {
 
   componentDidMount() {
     let defaultElement = this.props.defaultElement;
-    this.setState({
-      leaveFor: {}
-    });
+    let leaveFor = {};
     const enterTo = this.props.enterTo === undefined ? 'default-element' : this.props.enterTo;
 
     if (defaultElement && defaultElement === 'first') {
@@ -418,26 +416,26 @@ class FocusableSection extends Component {
     }
 
     if (typeof this.props.neighborLeft === 'string') {
-      this.setState(state => (state.leaveFor.left = this.props.neighborLeft, state));
+      leaveFor.left = this.props.neighborLeft;
     }
 
     if (typeof this.props.neighborRight === 'string') {
-      this.setState(state => (state.leaveFor.right = this.props.neighborRight, state));
+      leaveFor.right = this.props.neighborRight;
     }
 
     if (typeof this.props.neighborUp === 'string') {
-      this.setState(state => (state.leaveFor.up = this.props.neighborUp, state));
+      leaveFor.up = this.props.neighborUp;
     }
 
     if (typeof this.props.neighborDown === 'string') {
-      this.setState(state => (state.leaveFor.down = this.props.neighborDown, state));
+      leaveFor.down = this.props.neighborDown;
     }
 
     JsSpatialNavigation.add(this.sectionId, {
       selector: this._getSelector(),
       enterTo: enterTo,
       defaultElement: defaultElement,
-      leaveFor: this.state.leaveFor
+      leaveFor: leaveFor
     });
 
     if (!this.el)
@@ -449,31 +447,17 @@ class FocusableSection extends Component {
     this.el.addEventListener('sn:enter-up', this._componentClickEnter, FocusableSection.eventOptions);
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.neighborUp !== state.leaveFor.up) {
-      return state => (state.leaveFor.up = props.neighborUp, state);
-    }
-    if (props.neighborDown !== state.leaveFor.down) {
-      return state => (state.leaveFor.down = props.neighborDown, state);
-    }
-    if (props.neighborLeft !== state.leaveFor.left) {
-      return state => (state.leaveFor.left = props.neighborLeft, state);
-    }
-    if (props.neighborRight !== state.leaveFor.right) {
-      return state => (state.leaveFor.right = props.neighborRight, state);
-    }
-
-    // Return null if the state hasn't changed
-    return null;
-  }
-
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.neighborUp !== prevProps.neighborUp || this.props.neighborDown !== prevProps.neighborDown ||
-      this.props.neighborLeft !== prevProps.neighborLeft || this.props.neighborRight !== prevProps.neighborRight ) {
-      JsSpatialNavigation.set(this.sectionId, {
-        leaveFor: this.state.leaveFor
-      });
+    const { neighborUp: up, neighborDown: down, neighborLeft: left, neighborRight: right } = this.props;
+    const { neighborUp, neighborDown, neighborLeft, neighborRight } = prevProps;
+
+    if (neighborUp === up && neighborDown === down && neighborLeft === left && neighborRight === right) {
+      return;
     }
+
+    JsSpatialNavigation.set(this.sectionId, {
+      leaveFor: {up, down, left, right}
+    });
   }
 
   componentWillUnmount() {
