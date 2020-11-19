@@ -468,8 +468,8 @@ class FocusableSection extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.neighborUp !== prevProps.neighborUp || prevProps.neighborDown !== prevProps.neighborDown ||
-      prevProps.neighborLeft !== prevProps.neighborLeft || prevProps.neighborRight !== prevProps.neighborRight ) {
+    if (this.props.neighborUp !== prevProps.neighborUp || this.props.neighborDown !== prevProps.neighborDown ||
+      this.props.neighborLeft !== prevProps.neighborLeft || this.props.neighborRight !== prevProps.neighborRight ) {
       JsSpatialNavigation.set(this.sectionId, {
         leaveFor: this.state.leaveFor
       });
