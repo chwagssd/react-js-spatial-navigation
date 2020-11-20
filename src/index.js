@@ -231,6 +231,7 @@ class Focusable extends Component {
   }
 
   render() {
+    const { active, className, id, children } = this.props;
     let classNames = [this.context.focusableSectionId ? this.context.focusableSectionId : config.focusableClassName];
 
     let aria = {};
@@ -240,17 +241,17 @@ class Focusable extends Component {
       }
     }
 
-    if (this.props.active) {
+    if (active) {
       classNames.push(config.activeClassName);
     }
 
-    if (this.props.className) {
-      classNames.push(this.props.className);
+    if (className) {
+      classNames.push(className);
     }
 
     return (
-      <div {...aria} className={classNames.join(' ')} ref={e => this.el = e} tabIndex="-1">
-        {this.props.children}
+      <div {...aria} className={classNames.join(' ')} id={id} ref={e => this.el = e} tabIndex="-1">
+        {children}
       </div>
     );
   }
@@ -470,15 +471,16 @@ class FocusableSection extends Component {
   }
 
   render() {
+    const { className, id, children } = this.props;
     let classNames = [];
 
-    if (this.props.className) {
-      classNames.push(this.props.className);
+    if (className) {
+      classNames.push(className);
     }
 
     return (
-      <div className={classNames.join(' ')} ref={e => this.el = e}>
-        {this.props.children}
+      <div className={classNames.join(' ')} id={id} ref={e => this.el = e}>
+        {children}
       </div>
     );
   }
