@@ -458,15 +458,16 @@ class FocusableSection extends Component {
   }
 
   render() {
+    const { className, id, children } = this.props;
     let classNames = [];
 
-    if (this.props.className) {
-      classNames.push(this.props.className);
+    if (className) {
+      classNames.push(className);
     }
 
     return (
-      <div className={classNames.join(' ')} ref={e => this.el = e}>
-        {this.props.children}
+      <div className={classNames.join(' ')} id={id} ref={e => this.el = e}>
+        {children}
       </div>
     );
   }
